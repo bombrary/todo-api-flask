@@ -1,6 +1,12 @@
 from flask import Blueprint, request
+from .db import db
 
 bp = Blueprint('todo', __name__)
+
+
+@bp.before_request
+def connect_db():
+    db.connect()
 
 
 @bp.route('/', methods=["GET"])

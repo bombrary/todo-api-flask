@@ -2,14 +2,18 @@ from flask import Flask
 import os
 
 
-def create_app():
-    app = Flask(__name__)
-    app.config['DB_PATH'] = os.path.join(app.instance_path, 'db.sqlite3')
-
+def make_instance_path(app):
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
+
+
+def create_app():
+    app = Flask(__name__)
+    app.config['DB_PATH'] = os.path.join(app.instance_path, 'db.sqlite3')
+
+    make_instance_path(app)
 
     from . import db
     db.init_app(app)
