@@ -31,8 +31,8 @@ def get(todo_id: int):
 
 @bp.route('/<int:todo_id>/', methods=["PUT"])
 def put(todo_id: int):
-    todo_dict = load_todo_or_400(request.get_json())
     todo = Todo.get_or_404(todo_id)
+    todo_dict = load_todo_or_400(request.get_json())
     todo.content = todo_dict['content']
     todo.save()
     return jsonify(dict())
