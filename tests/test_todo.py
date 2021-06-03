@@ -2,16 +2,13 @@ import json
 
 
 def test_get_all(client):
-    mimetype = 'application/json'
-    res = client.get('/todo/', mimetype=mimetype)
+    res = client.get('/todo/')
     assert res.get_json() == []
 
     contents = ["aaa", "bbb", "ccc"]
     for content in contents:
-        data = json.dumps({'content': content})
-        res = client.post('/todo/', mimetype=mimetype, data=data)
+        res = client.post('/todo/', json={'content': content})
 
-    res = client.get('/todo/', mimetype=mimetype)
+    res = client.get('/todo/')
     for content, todo in zip(contents, res.get_json()):
         assert content == todo['content']
-
