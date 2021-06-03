@@ -20,8 +20,10 @@ def close_db(e=None):
 
 
 def init_db():
+    db.connect()
     db.drop_tables([Todo])
     db.create_tables([Todo])
+    db.close()
 
 
 @click.command('init-db')
