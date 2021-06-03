@@ -15,7 +15,7 @@ def init_app(app: Flask):
 
 
 def close_db(e=None):
-    if db.is_closed():
+    if not db.is_closed():
         db.close()
 
 
