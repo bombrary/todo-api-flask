@@ -9,7 +9,7 @@ def make_instance_path(app):
         pass
 
 
-def create_app(test_config=None):
+def create_app(test_config: dict = None):
     app = Flask(__name__)
     app.config['DB_PATH'] = os.path.join(app.instance_path, 'db.sqlite3')
     app.config['JSON_AS_ASCII'] = False
