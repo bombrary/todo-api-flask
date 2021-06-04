@@ -1,4 +1,5 @@
 import pytest
+from urllib.parse import urlparse
 
 
 def test_get_all(client):
@@ -8,7 +9,8 @@ def test_get_all(client):
     contents = ["aaa", "bbb", "ccc"]
     for i, content in enumerate(contents):
         res = client.post('/todo/', json={'content': content})
-        assert res.get_json() == i + 1
+
+        assert urlparse(res.headers.get('Location')).path == f'/todo/{i + 1}/'
 
     res = client.get('/todo/')
     for content, todo in zip(contents, res.get_json()):
@@ -38,8 +40,9 @@ def test_post_bad(client, json_data):
 
 def test_post(client):
     res = client.post('/todo/', json={'content': 'foo'})
-    assert res.status_code == 200
-    assert res.get_json() == 1
+    assert res.status_code == 201
+
+    assert urlparse(res.headers.get('Location')).path == '/todo/1/'
 
 
 def test_delete(client):
@@ -48,7 +51,7 @@ def test_delete(client):
 
     client.post('/todo/', json={'content': 'foo'})
     res = client.delete('/todo/1/')
-    assert res.status_code == 200
+    assert res.status_code == 204
 
 
 @pytest.mark.parametrize(('json_data'), (
@@ -71,7 +74,7 @@ def test_put(client):
 
     client.post('/todo/', json=json_data)
     res = client.put('/todo/1/', json=json_data)
-    assert res.status_code == 200
+    assert res.status_code == 204
 
 
 def test_not_json(client):

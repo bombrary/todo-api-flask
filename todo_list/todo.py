@@ -20,7 +20,7 @@ def get_all():
 def post():
     todo_dict = load_todo_or_400(request.get_json())
     todo = Todo.create(content=todo_dict['content'])
-    return jsonify(todo.id)
+    return '', 201, [('Location', f'/todo/{todo.id}/')]
 
 
 @bp.route('/<int:todo_id>/', methods=["GET"])
@@ -35,11 +35,11 @@ def put(todo_id: int):
     todo_dict = load_todo_or_400(request.get_json())
     todo.content = todo_dict['content']
     todo.save()
-    return jsonify(dict())
+    return '', 204
 
 
 @bp.route('/<int:todo_id>/', methods=["DELETE"])
 def delete(todo_id: int):
     todo = Todo.get_or_404(todo_id)
     todo.delete_instance()
-    return jsonify(dict())
+    return '', 204
